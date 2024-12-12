@@ -2,6 +2,7 @@ import sys
 import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 from openpyxl import load_workbook, Workbook
 import smtplib
 from email.mime.text import MIMEText
@@ -92,20 +93,23 @@ class EmailSenderApp(QtWidgets.QMainWindow):
 
     def attach_image(self, slot):
         """ 이미지 파일을 선택하고 경로를 저장 """
-        file_name, _ = QFileDialog.getOpenFileName(self, f"이미지 {slot} 파일 선택", "", "Image Files (*.png *.jpg *.jpeg *.gif)")
+        file_name, _ = QFileDialog.getOpenFileName(self, f"이미지 {slot} 파일 선택", "","Image Files (*.png *.jpg *.jpeg *.gif)")
         if file_name:
             self.attached_images[slot] = file_name
             self.textEditLog.append(f"이미지 {slot} 첨부: {file_name}")
+            print(f"DEBUG: 이미지 {slot} 경로 -> {file_name}")
 
     def remove_image(self, slot):
         """ 특정 이미지 첨부를 제거 """
         self.attached_images[slot] = None
         self.textEditLog.append(f"이미지 {slot} 삭제 완료!")
+
     def preview_email(self):
         """ 미리보기 팝업 """
         subject = self.lineEditEmailSubject.text()
         body = self.textEditEmailBody.toPlainText()
 
+        # HTML 미리보기 작성
         html_preview = f"""<html><body>
         <h1>{subject}</h1>
         <p>{body}</p>
@@ -113,10 +117,20 @@ class EmailSenderApp(QtWidgets.QMainWindow):
 
         for slot in range(1, 4):
             if self.attached_images[slot]:
-                html_preview += f'<img src="file://{self.attached_images[slot]}" style="max-width:600px;max-height:600px;"><br>'
+                image_path = os.path.abspath(self.attached_images[slot])
+                if os.path.exists(image_path):
+                    html_preview += f'<img src="file:///{image_path}" style="max-width:600px;max-height:600px;"><br>'
+                else:
+                    self.textEditLog.append(f"이미지 {slot} 경로 오류: {image_path}가 존재하지 않습니다.")
 
         html_preview += "</body></html>"
 
+        # HTML 내용 확인
+        with open("preview_debug.html", "w", encoding="utf-8") as debug_file:
+            debug_file.write(html_preview)
+        print("DEBUG: 미리보기 HTML 파일 생성 완료 -> preview_debug.html")
+
+        # 미리보기 창 설정
         preview_window = QtWidgets.QDialog(self)
         preview_window.setWindowTitle("미리보기")
         preview_window.resize(700, 500)
