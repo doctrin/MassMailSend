@@ -113,13 +113,14 @@ class EmailSenderApp(QtWidgets.QMainWindow):
         html_preview = f"""<html><body>
         <h1>{subject}</h1>
         <p>{body}</p>
+        <br>
         """
 
         for slot in range(1, 4):
             if self.attached_images[slot]:
                 image_path = os.path.abspath(self.attached_images[slot])
                 if os.path.exists(image_path):
-                    html_preview += f'<img src="file:///{image_path}" style="max-width:600px;max-height:600px;"><br>'
+                    html_preview += f'<img src="file:///{image_path}" style="max-width:500px;max-height:500px;"><br><br>'
                 else:
                     self.textEditLog.append(f"이미지 {slot} 경로 오류: {image_path}가 존재하지 않습니다.")
 
@@ -186,7 +187,7 @@ class EmailSenderApp(QtWidgets.QMainWindow):
                 html_body = f"""<html><body>{body}<br>"""
                 for slot in range(1, 4):
                     if self.attached_images[slot]:
-                        html_body += f'<img src="cid:image{slot}" style="max-width:600px;max-height:600px;"><br>'
+                        html_body += f'<img src="cid:image{slot}" style="max-width:500px;max-height:500px;"><br>'
                 html_body += "</body></html>"
                 msg.attach(MIMEText(html_body, "html"))
 
