@@ -12,6 +12,7 @@ from email import encoders
 import ssl
 import pygame  # pygame을 사용하여 소리 재생
 import re  # 이메일 패턴 검증을 위한 정규식 모듈
+import webbrowser  # 웹 브라우저 열기를 위한 모듈 추가
 
 class EmailSenderApp(QtWidgets.QMainWindow):
     def __init__(self):
@@ -34,11 +35,17 @@ class EmailSenderApp(QtWidgets.QMainWindow):
         self.btnRemoveImage3.clicked.connect(lambda: self.remove_image(3))  # 이미지 3 삭제 버튼 클릭 이벤트
         self.btnPreviewEmail.clicked.connect(self.preview_email)  # 미리보기 버튼 클릭 이벤트
 
+        # 이미지 크기 적용 버튼 연결
+        self.btnApplyImage1Size.clicked.connect(lambda: self.set_image_size(1))
+        self.btnApplyImage2Size.clicked.connect(lambda: self.set_image_size(2))
+        self.btnApplyImage3Size.clicked.connect(lambda: self.set_image_size(3))
+
         # pygame 초기화
         pygame.mixer.init()
 
-        # 첨부된 이미지 경로
+        # 첨부된 이미지 경로 및 크기
         self.attached_images = {1: None, 2: None, 3: None}
+        self.image_sizes = {1: (None, None), 2: (None, None), 3: (None, None)}
 
     def resource_path(self, relative_path):
         """ EXE에서 리소스 경로를 찾을 수 있도록 도와주는 함수 """
@@ -104,10 +111,25 @@ class EmailSenderApp(QtWidgets.QMainWindow):
         self.attached_images[slot] = None
         self.textEditLog.append(f"이미지 {slot} 삭제 완료!")
 
+    def set_image_size(self, slot):
+        try:
+            width = int(self.findChild(QtWidgets.QLineEdit, f"lineEditImage{slot}Width").text())
+            height = int(self.findChild(QtWidgets.QLineEdit, f"lineEditImage{slot}Height").text())
+            self.image_sizes[slot] = (width, height)
+            self.textEditLog.append(f"이미지 {slot} 크기 설정: {width}x{height}")
+        except ValueError:
+            QMessageBox.warning(self, "경고", f"이미지 {slot} 크기를 올바르게 입력하세요.")
+
     def preview_email(self):
-        """ 미리보기 팝업 """
+        """ 미리보기 팝업을 웹 브라우저로 열기 """
+        import shutil  # 임시 파일 복사를 위해 추가
+
         subject = self.lineEditEmailSubject.text()
         body = self.textEditEmailBody.toPlainText()
+
+        # 임시 디렉토리 설정
+        temp_dir = os.path.join(os.getcwd(), "temp_preview_images")
+        os.makedirs(temp_dir, exist_ok=True)
 
         # HTML 미리보기 작성
         html_preview = f"""<html><body>
@@ -118,29 +140,33 @@ class EmailSenderApp(QtWidgets.QMainWindow):
 
         for slot in range(1, 4):
             if self.attached_images[slot]:
+                # 이미지 절대 경로 생성
                 image_path = os.path.abspath(self.attached_images[slot])
                 if os.path.exists(image_path):
-                    html_preview += f'<img src="file:///{image_path}" style="max-width:500px;max-height:500px;"><br><br>'
+                    # 임시 디렉토리로 이미지 복사
+                    temp_image_path = os.path.join(temp_dir, f"image_{slot}.png")
+                    shutil.copy(image_path, temp_image_path)
+
+                    # 경로를 수정하여 HTML에 추가
+                    temp_image_url = temp_image_path.replace(os.sep, "/")  # os.sep 사용
+                    width, height = self.image_sizes[slot]
+                    size_style = f"width:{width}px; height:{height}px;" if width and height else ""
+                    html_preview += f'<img src="file:///{temp_image_url}" style="{size_style}"><br><br>'
                 else:
                     self.textEditLog.append(f"이미지 {slot} 경로 오류: {image_path}가 존재하지 않습니다.")
 
         html_preview += "</body></html>"
 
-        # HTML 내용 확인
-        with open("preview_debug.html", "w", encoding="utf-8") as debug_file:
+        # HTML 파일 저장
+        debug_file_path = os.path.join(temp_dir, "preview_debug.html")
+        with open(debug_file_path, "w", encoding="utf-8") as debug_file:
             debug_file.write(html_preview)
-        print("DEBUG: 미리보기 HTML 파일 생성 완료 -> preview_debug.html")
+        print(f"DEBUG: 미리보기 HTML 파일 생성 완료 -> {debug_file_path}")
 
-        # 미리보기 창 설정
-        preview_window = QtWidgets.QDialog(self)
-        preview_window.setWindowTitle("미리보기")
-        preview_window.resize(700, 500)
-
-        text_browser = QtWidgets.QTextBrowser(preview_window)
-        text_browser.setHtml(html_preview)
-        text_browser.setGeometry(10, 10, 680, 480)
-
-        preview_window.exec_()
+        # 기본 웹 브라우저에서 HTML 파일 열기
+        debug_file_url = debug_file_path.replace(os.sep, "/")  # os.sep 사용
+        webbrowser.open(f"file:///{debug_file_url}")
+        self.textEditLog.append(f"미리보기 브라우저 열림: {debug_file_path}")
 
     def send_emails(self):
         sender_email = self.lineEditSenderEmail.text()  # 발송자 이메일
@@ -155,6 +181,7 @@ class EmailSenderApp(QtWidgets.QMainWindow):
 
         smtp_server = "smtp.gmail.com"
         smtp_port = 587
+        all_success = True  # 모든 메일 발송 성공 여부
 
         success_log = []
         failure_log = []
@@ -176,6 +203,7 @@ class EmailSenderApp(QtWidgets.QMainWindow):
                 if not self.validate_email(recipient):
                     failure_log.append(f"실패: {recipient} - 이메일 주소 형식 오류")
                     self.textEditLog.append(f"{recipient} - 이메일 형식 오류!")
+                    all_success = False
                     continue
 
                 msg = MIMEMultipart()
@@ -187,7 +215,14 @@ class EmailSenderApp(QtWidgets.QMainWindow):
                 html_body = f"""<html><body>{body}<br>"""
                 for slot in range(1, 4):
                     if self.attached_images[slot]:
-                        html_body += f'<img src="cid:image{slot}" style="max-width:500px;max-height:500px;"><br>'
+                        ###
+                        #html_body += f'<img src="cid:image{slot}" style="max-width:500px;max-height:500px;"><br>'
+
+                        width, height = self.image_sizes[slot]
+                        size_style = f"width:{width}px; height:{height}px;" if width and height else ""
+                        html_body += f'<img src="cid:image{slot}" style="{size_style}"><br>'
+
+
                 html_body += "</body></html>"
                 msg.attach(MIMEText(html_body, "html"))
 
@@ -199,6 +234,7 @@ class EmailSenderApp(QtWidgets.QMainWindow):
                             mime.set_payload(img.read())
                             encoders.encode_base64(mime)
                             mime.add_header('Content-Disposition', 'attachment', filename=os.path.basename(self.attached_images[slot]))
+
                             mime.add_header('Content-ID', f'<image{slot}>')
                             mime.add_header('X-Attachment-Id', f'image{slot}')
                             msg.attach(mime)
@@ -210,8 +246,12 @@ class EmailSenderApp(QtWidgets.QMainWindow):
                 except Exception as e:
                     failure_log.append(f"실패: {recipient} - {str(e)}")
                     self.textEditLog.append(f"{recipient} - 메일 발송 실패! 오류: {str(e)}")
+                    all_success = False
 
             server.quit()
+            # 모든 메일 발송 성공 시 성공 사운드 재생
+            if all_success:
+                self.play_success_sound()
 
             # 성공/실패 결과 표시
             self.textEditLog.append(f"\n메일 발송 완료! 성공: {len(success_log)} / 실패: {len(failure_log)}")
@@ -222,6 +262,26 @@ class EmailSenderApp(QtWidgets.QMainWindow):
 
         except Exception as e:
             self.textEditLog.append(f"SMTP 서버 연결 오류: {str(e)}")
+
+    def play_success_sound(self):
+        """ 메일 발송 성공 사운드 재생 """
+        try:
+            sound_path = self.resource_path("tada.mp3")
+            pygame.mixer.music.load(sound_path)
+            pygame.mixer.music.play()
+            #self.textEditLog.append("성공 사운드 재생 완료!")
+        except Exception as e:
+            self.textEditLog.append(f"사운드 재생 오류: {str(e)}")
+
+    def play_fail_sound(self):
+        """ 메일 발송 성공 사운드 재생 """
+        try:
+            sound_path = self.resource_path("error.mp3")
+            pygame.mixer.music.load(sound_path)
+            pygame.mixer.music.play()
+            #self.textEditLog.append("실패 사운드 재생 완료!")
+        except Exception as e:
+            self.textEditLog.append(f"사운드 재생 오류: {str(e)}")
 
     def clear_log(self):
         """ 로그 창을 초기화하는 함수 """

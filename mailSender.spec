@@ -5,7 +5,7 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('email_sender.ui', '.')],
+    datas=[('email_sender_add_bodyTxt_image.ui', '.'), ('tada.mp3', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

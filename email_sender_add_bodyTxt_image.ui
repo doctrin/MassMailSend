@@ -99,7 +99,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>180</y>
+     <y>170</y>
      <width>660</width>
      <height>100</height>
     </rect>
@@ -108,8 +108,8 @@
   <widget class="QPushButton" name="btnAttachImage1">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>300</y>
+     <x>23</x>
+     <y>301</y>
      <width>100</width>
      <height>30</height>
     </rect>
@@ -121,8 +121,8 @@
   <widget class="QPushButton" name="btnRemoveImage1">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>300</y>
+     <x>133</x>
+     <y>301</y>
      <width>100</width>
      <height>30</height>
     </rect>
@@ -134,8 +134,8 @@
   <widget class="QPushButton" name="btnAttachImage2">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>340</y>
+     <x>23</x>
+     <y>341</y>
      <width>100</width>
      <height>30</height>
     </rect>
@@ -147,8 +147,8 @@
   <widget class="QPushButton" name="btnRemoveImage2">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>340</y>
+     <x>133</x>
+     <y>341</y>
      <width>100</width>
      <height>30</height>
     </rect>
@@ -160,8 +160,8 @@
   <widget class="QPushButton" name="btnAttachImage3">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>380</y>
+     <x>23</x>
+     <y>381</y>
      <width>100</width>
      <height>30</height>
     </rect>
@@ -173,8 +173,8 @@
   <widget class="QPushButton" name="btnRemoveImage3">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>380</y>
+     <x>133</x>
+     <y>381</y>
      <width>100</width>
      <height>30</height>
     </rect>
@@ -183,11 +183,149 @@
     <string>이미지 3 삭제</string>
    </property>
   </widget>
+  <widget class="QLabel" name="labelImage1Size">
+   <property name="geometry">
+    <rect>
+     <x>253</x>
+     <y>301</y>
+     <width>151</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>이미지 1 크기 (가로x세로)</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditImage1Width">
+   <property name="geometry">
+    <rect>
+     <x>406</x>
+     <y>301</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditImage1Height">
+   <property name="geometry">
+    <rect>
+     <x>483</x>
+     <y>301</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnApplyImage1Size">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>301</y>
+     <width>60</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>적용</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelImage2Size">
+   <property name="geometry">
+    <rect>
+     <x>253</x>
+     <y>341</y>
+     <width>151</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>이미지 2 크기 (가로x세로)</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditImage2Width">
+   <property name="geometry">
+    <rect>
+     <x>406</x>
+     <y>341</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditImage2Height">
+   <property name="geometry">
+    <rect>
+     <x>483</x>
+     <y>341</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnApplyImage2Size">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>341</y>
+     <width>60</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>적용</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelImage3Size">
+   <property name="geometry">
+    <rect>
+     <x>253</x>
+     <y>381</y>
+     <width>151</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>이미지 3 크기 (가로x세로)</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditImage3Width">
+   <property name="geometry">
+    <rect>
+     <x>406</x>
+     <y>381</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditImage3Height">
+   <property name="geometry">
+    <rect>
+     <x>483</x>
+     <y>381</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnApplyImage3Size">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>381</y>
+     <width>60</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>적용</string>
+   </property>
+  </widget>
   <widget class="QPushButton" name="btnUploadExcel">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>420</y>
+     <y>433</y>
      <width>150</width>
      <height>30</height>
     </rect>
@@ -200,7 +338,7 @@
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>420</y>
+     <y>433</y>
      <width>150</width>
      <height>30</height>
     </rect>
@@ -213,7 +351,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>460</y>
+     <y>473</y>
      <width>480</width>
      <height>150</height>
     </rect>
@@ -234,7 +372,7 @@
    <property name="geometry">
     <rect>
      <x>350</x>
-     <y>420</y>
+     <y>433</y>
      <width>150</width>
      <height>30</height>
     </rect>
@@ -282,6 +420,132 @@
     <string>로그 엑셀로 저장</string>
    </property>
   </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>281</y>
+     <width>661</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>[ 이미지 ]</string>
+   </property>
+   <widget class="QLabel" name="labelPxl_2">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>60</y>
+      <width>16</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>px</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelPxl_3">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>100</y>
+      <width>16</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>px</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelPxl_4">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>17</y>
+      <width>16</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>px</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelPxl_5">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>60</y>
+      <width>16</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>px</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelPxl_6">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>100</y>
+      <width>16</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>px</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="labelPxl">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>300</y>
+     <width>16</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>px</string>
+   </property>
+  </widget>
+  <zorder>groupBox</zorder>
+  <zorder>labelSenderEmail</zorder>
+  <zorder>lineEditSenderEmail</zorder>
+  <zorder>labelSenderPassword</zorder>
+  <zorder>lineEditSenderPassword</zorder>
+  <zorder>labelEmailSubject</zorder>
+  <zorder>lineEditEmailSubject</zorder>
+  <zorder>labelEmailBody</zorder>
+  <zorder>textEditEmailBody</zorder>
+  <zorder>btnAttachImage1</zorder>
+  <zorder>btnRemoveImage1</zorder>
+  <zorder>btnAttachImage2</zorder>
+  <zorder>btnRemoveImage2</zorder>
+  <zorder>btnAttachImage3</zorder>
+  <zorder>btnRemoveImage3</zorder>
+  <zorder>labelImage1Size</zorder>
+  <zorder>lineEditImage1Width</zorder>
+  <zorder>lineEditImage1Height</zorder>
+  <zorder>btnApplyImage1Size</zorder>
+  <zorder>labelImage2Size</zorder>
+  <zorder>lineEditImage2Width</zorder>
+  <zorder>lineEditImage2Height</zorder>
+  <zorder>btnApplyImage2Size</zorder>
+  <zorder>labelImage3Size</zorder>
+  <zorder>lineEditImage3Width</zorder>
+  <zorder>lineEditImage3Height</zorder>
+  <zorder>btnApplyImage3Size</zorder>
+  <zorder>btnUploadExcel</zorder>
+  <zorder>btnSendEmails</zorder>
+  <zorder>tableWidget</zorder>
+  <zorder>btnPreviewEmail</zorder>
+  <zorder>textEditLog</zorder>
+  <zorder>btnClearLog</zorder>
+  <zorder>btnSaveLogToExcel</zorder>
+  <zorder>labelPxl</zorder>
  </widget>
  <resources/>
  <connections/>
